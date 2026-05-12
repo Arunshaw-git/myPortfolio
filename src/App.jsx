@@ -1,59 +1,104 @@
-import { useState, useEffect } from 'react'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import ScrollVideo from './components/ScrollVideoSimple'
-import './App.css'
+import { useLayoutEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+import CursorGlow from './components/CursorGlow';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import About from './components/About';
+import Projects from './components/Projects';
+import Skills from './components/Skills';
+import Experience from './components/Experience';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
+
+import './index.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  const [scrollProgress, setScrollProgress] = useState(0)
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Progress Bar
+      gsap.to('#progress-bar', {
+        width: '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: 'body',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.3
+        }
+      });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollPosition = window.scrollY
-      const progress = (scrollPosition / scrollHeight) * 100
-      setScrollProgress(progress)
-    }
+      // Panel Scroll Effect
+      const panels = gsap.utils.toArray('.panel');
+      panels.forEach((panel, index) => {
+        // Force initial state
+        if (index === 0) {
+          panel.classList.add('active');
+          panel.classList.remove('receding');
+        } else {
+          panel.classList.add('receding');
+          panel.classList.remove('active');
+        }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+        ScrollTrigger.create({
+          trigger: panel,
+          start: 'top 95%', // Trigger slightly before it comes into full view
+          end: 'bottom 5%',
+          onEnter: () => {
+            panel.classList.remove('receding');
+            panel.classList.add('active');
+          },
+          onLeave: () => {
+            panel.classList.add('receding');
+            panel.classList.remove('active');
+          },
+          onEnterBack: () => {
+            panel.classList.remove('receding');
+            panel.classList.add('active');
+          },
+          onLeaveBack: () => {
+            panel.classList.add('receding');
+            panel.classList.remove('active');
+          }
+        });
+      });
+    });
+
+    const handleResize = () => ScrollTrigger.refresh();
+    window.addEventListener('resize', handleResize);
+
+    const timeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
+    return () => {
+      ctx.revert();
+      clearTimeout(timeout);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div className="app">
+      <div id="progress-bar"></div>
+      <CursorGlow />
       <Navbar />
-      <Hero />
-      <ScrollVideo />
       
-      <section id="experience" className="section">
-        <div className="container">
-          <h2>Experience</h2>
-          <p>Scroll to see the hero animation progress: {Math.round(scrollProgress)}%</p>
-          <div className="content">
-            <p>Your professional experience will go here.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="projects" className="section">
-        <div className="container">
-          <h2>Projects</h2>
-          <div className="content">
-            <p>Your featured projects will be showcased here.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" className="section">
-        <div className="container">
-          <h2>Contact</h2>
-          <div className="content">
-            <p>Get in touch with me through this section.</p>
-          </div>
-        </div>
-      </section>
+      <div className="scroll-container">
+        <Hero />
+        <About />
+        <Projects />
+        <Skills />
+        <Experience />
+        <Contact />
+      </div>
+      
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
