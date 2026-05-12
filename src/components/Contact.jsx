@@ -37,6 +37,21 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const subject = formData.get('subject');
+    const message = formData.get('message');
+
+    // Construct WhatsApp message
+    const whatsappMessage = `*New Contact Form Submission*%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Subject:* ${encodeURIComponent(subject)}%0A*Message:* ${encodeURIComponent(message)}`;
+    
+    // WhatsApp URL (using the phone number from the component)
+    const whatsappUrl = `https://wa.me/917003664850?text=${whatsappMessage}`;
+
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, '_blank');
+    
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
     e.target.reset();
