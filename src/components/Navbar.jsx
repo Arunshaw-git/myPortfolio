@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem('darkMode') === 'true'
+    localStorage.getItem('darkMode') !== 'false'
   );
   const [isScrolled, setIsScrolled] = useState(false);
 
