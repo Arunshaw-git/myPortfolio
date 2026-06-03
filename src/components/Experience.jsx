@@ -55,14 +55,14 @@ const Experience = () => {
   }, []);
 
   const experienceData = [
-    {
-      period: 'Feb 2026 – Mar 2026',
-      role: 'Full Stack Developer',
-      company: 'Cleryn Global Software',
-      desc: 'Developing premium E-commerce platforms and CRM systems. Leading backend architecture and world-class UI implementation.',
-      tags: ['React', 'Node.js', 'GSAP'],
-      filled: true
-    },
+    // {
+    //   period: 'Feb 2026 – Mar 2026',
+    //   role: 'Full Stack Developer',
+    //   company: 'Cleryn Global Software',
+    //   desc: 'Developing premium E-commerce platforms and CRM systems. Leading backend architecture and world-class UI implementation.',
+    //   tags: ['React', 'Node.js', 'GSAP'],
+    //   filled: true
+    // },
     {
       period: 'Sept 2025 – Nov 2025',
       role: 'Software Developer Trainee',
